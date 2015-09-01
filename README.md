@@ -6,8 +6,7 @@ Eventually, this little app should allow music theory teachers and students to i
 
 Get it Working
 --------------
-Download the .zip file, unzip, and run the following within the voiceleader directory:
-ruby bin/app.rb
+Enter the following command within the voiceleader directory: ruby bin/app.rb
 
 Note that you must have the Sinatra gem installed.  
 
