@@ -1,0 +1,82 @@
+body {
+  background: #88BB88;
+  color: black;
+  font-family: Helvetica, sans-serif;
+  width: 700px;
+  margin: 0 auto 0 auto;
+  font-size: .9em;
+  border: 1px solid black;
+}
+header {
+  border-bottom: 1px solid black;
+}
+img {
+  /* This eliminates 'padding' below the image */
+  vertical-align: top;
+}
+article {
+  background: white;
+  border: 0px double red;
+  padding: 1em;
+}
+a.staff {
+  width: 100%;
+  height: 100px;
+  display: block;
+  background: #DDDDDD;
+  background-image: url("images/staff_background.png");
+  background-repeat: repeat-x;
+}
+a.staff img {
+  width: 19px;
+  position: relative;
+  top: 42%;
+  left: 100px;
+  margin-right: 2.5em;
+}
+div#music {
+  border: 3px solid #440044;
+}
+div.float {
+  float: left;
+  margin-right: 1em;
+}
+div#voice_input label {
+  display: inline-block; 
+  width: 10em;
+  margin-right: .5em;
+  text-align: right;
+}
+h1, h2 {
+  font-size: 1.5em;
+  color: #440044;
+  margin-top: 0;
+}
+p.foot {
+  margin: 0;
+}
+form legend {
+  font-weight: bold;
+}
+table {
+  width: 100%;
+}
+table tr td {
+  vertical-align: top;
+}
+dt {
+  font-weight: bold;
+}
+dd {
+  width: 60%;
+  color: #222222;
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+footer {
+  font-size: .75em;
+  background: black;
+  color: white;
+  text-align: center;
+  margin: 0;
+}

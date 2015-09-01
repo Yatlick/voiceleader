@@ -1,0 +1,19 @@
+<h1>Results from VoiceLeader</h1>
+
+<p>The key is: <%= key %></p>
+<p>The options were <%= options %></p>
+
+<%= html_info %>
+
+<h2>Voiceleading Errors</h2>
+
+<% mistakes.each do |chord_name, chord_mistakes| %>  
+  <h3><%= chord_name %></h3>
+  <dl> 
+  <% chord_mistakes.each do |mistake| %>
+    <dt><%= mistake.type %></dt>
+    <dd><%= mistake.value %></dd>
+  <% end %>
+  
+  </dl>
+<% end %>   

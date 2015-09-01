@@ -1,3 +1,12 @@
+class Mistake
+
+  def initialize(type, value)
+    @type = type
+    @value = value
+  end
+
+  attr_reader :type, :value
+end
 
 module VoiceLead
   
@@ -18,29 +27,32 @@ module VoiceLead
      
     # Find parallel motion
     parallels = indexes.select { |i| set_a[i][2] == set_b[i][2] }
-    return nil if parallels.empty?
       
     # Return mistake string
-    pairs = []
-    parallels.each { |p| pairs << "#{set_b[p][0]} and #{set_b[p][1]}" }
-    mistake_text = pairs.join(', ')
-    return "Parallel #{type} between the #{mistake_text}."
+    mistakes = []
+    parallels.each do |p| 
+      mistakes << Mistake.new("Parallel #{type.capitalize}", 
+                              "Between the #{set_b[p][0]} and #{set_b[p][1]}")
+    end
+    
+    return mistakes
   end
 
   # Check for proper downward resolution of 7ths
-  def VoiceLead.sevenths(chord_a, chord_b)
-    return nil unless chord_a.parts.has_value?('seventh')
+  def VoiceLead.sevenths(chord_a, chord_b, none)
+    return [] unless chord_a.parts.has_value?('seventh')
     voices = chord_a.parts.map{ |k,v| v == 'seventh' ? k : nil }.compact
         
     mistakes = []
     voices.each do |v|
       leap = chord_a.pitches[v] - chord_b.pitches[v]
-      mistakes << v unless (1..2).include?(leap)
+      unless (1..2).include?(leap)
+        mistakes << Mistake.new('Improperly resolved 7th',
+                                "In the #{v}")
+      end
     end
-    return nil if mistakes.empty?
 
-    mistake_text = mistakes.join(', ')
-    return "Improperly resolved 7th in #{mistake_text}."
+    return mistakes
   end
   
 end

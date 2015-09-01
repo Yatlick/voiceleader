@@ -1,13 +1,19 @@
 class Music
 
+  def get_pairs
+    chord_pairs = []
+    self.chords.each_cons(2) { |c, d| chord_pairs << [c, d] }
+    return chord_pairs
+  end
+
   def initialize(key, chords_array)
     @chords = chords_array
+    @chord_pairs = self.get_pairs
     @length = chords_array.length
     @key = key
   end
   
-  attr_reader :chords, :key, :length
-  attr_writer :chords
+  attr_reader :chords, :chord_pairs, :key, :length
 
 end
 
@@ -121,7 +127,7 @@ class Chord
     @name = self.get_type
     @parts = self.get_parts
     @intervals = self.get_intervals
-    @mistakes = {}
+    @mistakes = []
   end
   
   attr_reader :pitch_set, :pitches, :name, :parts, :intervals, :mistakes
