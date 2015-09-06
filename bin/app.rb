@@ -17,9 +17,7 @@ post '/results' do
   notes = [params[:bass], params[:tenor], params[:alto], params[:soprano]]
   music = make_music(key, notes)
   options = params[:options]
-  html_info = print_info(music)
   mistakes = find_mistakes(music, options)
 
-  erb :results, :locals => {'key' => key, 'options' => options, 'html_info' => html_info,
-                            'mistakes' => mistakes}
+  erb :results, :locals => {'music' => music, 'mistakes' => mistakes}
 end

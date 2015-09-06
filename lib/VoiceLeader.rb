@@ -2,26 +2,18 @@ require './lib/VoiceLeader/chord.rb'
 require './lib/VoiceLeader/voicelead.rb'
 
 def make_music(key, notes)
+  key = key.split(" ")
+  key = {'type' => key[0], 'number' => key[1].to_i}
+  music = Music.new(key)
+  
   pitches = []
   notes.each do |n|
     pitches << n.split(",").map(&:to_i)
   end
   pitches = pitches.transpose
+  pitches.each { |p| music.chords << Chord.new(p, music) }
   
-  chords = []
-  pitches.each { |p| chords << Chord.new(p) }
-  
-  music = Music.new(key, chords)
-end
-
-def print_info(music)
-  html_names = "<h1>Each Chord Type</h1>\n"
-  
-  music.chords.each do |c|
-    html_names += "<p>#{c.name}</p>\n"
-  end
-  
-  return html_names
+  return music
 end
 
 def find_mistakes(music, options)
@@ -31,20 +23,12 @@ def find_mistakes(music, options)
     'p_unisons' => [:parallel, 'unisons'],
     'sevenths' => [:sevenths, 'none']  # unsure how to call variable arguments in loop
   }
-  all_mistakes = {}
-  chord_number = 0
   music.chord_pairs.each do |chord_a, chord_b|
-    chord_number += 1
-    pair_mistakes = []
-    
     options.each do |o|
-      mistakes = VoiceLead.send(option_possibilities[o][0], chord_a, chord_b, option_possibilities[o][1])
-      pair_mistakes << mistakes
+      chord_a.mistakes += VoiceLead.send(option_possibilities[o][0], chord_a, 
+                                         chord_b, option_possibilities[o][1])
     end
-
-    all_mistakes["Chord ##{chord_number}"] = pair_mistakes.flatten unless pair_mistakes.flatten.empty?
   end
-  return all_mistakes
 end
       
       

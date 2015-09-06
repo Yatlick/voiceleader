@@ -11,25 +11,26 @@
   <fieldset>
     <legend>Key</legend>
     <select name="key">
-    <option value="0">C Major / a minor</option>
-    <option value="7">G Major / e minor</option>
-    <option value="2">D Major / b minor</option>
-    <option value="9">A Major / f# minor</option>
-    <option value="4">E Major / c# minor</option>
-    <option value="11">B Major / g# minor</option>
-    <option value="6">F# Major / d# minor</option>
-    <option value="1">C# Major / a# minor</option>
-    <option value="5">F Major / d minor</option>
-    <option value="10">Bb Major / g minor</option>
-    <option value="3">Eb Major / c minor</option>
-    <option value="8">Ab Major / f minor</option>
-    <option value="1">Db Major / b-flat minor</option>
-    <option value="6">Gb Major / e-flat minor</option>
-    <option value="11">Cb Major / a-flat minor</option>
+    <option value="sharp 0">C Major / a minor</option>
+    <option value="sharp 7">G Major / e minor</option>
+    <option value="sharp 2">D Major / b minor</option>
+    <option value="sharp 9">A Major / f# minor</option>
+    <option value="sharp 4">E Major / c# minor</option>
+    <option value="sharp 11">B Major / g# minor</option>
+    <option value="sharp 6">F# Major / d# minor</option>
+    <option value="sharp 1">C# Major / a# minor</option>
+    <option value="flat 5">F Major / d minor</option>
+    <option value="flat 10">Bb Major / g minor</option>
+    <option value="flat 3">Eb Major / c minor</option>
+    <option value="flat 8">Ab Major / f minor</option>
+    <option value="flat 1">Db Major / b-flat minor</option>
+    <option value="flat 6">Gb Major / e-flat minor</option>
+    <option value="flat 11">Cb Major / a-flat minor</option>
     </select>
   </fieldset>
   <fieldset>
     <legend>Notes</legend>
+    <!-- all staves in single line to avoid DOM artifacts -->
     <div id="music">
       <a class="staff" id="soprano" tabindex="0"></a>
       <a class="staff" id="alto" tabindex="0"></a>
@@ -41,10 +42,10 @@
       <input id="migrate" type="button" value="Fill Pitches" onClick="fillPitches();">
     </div>
     <div class="float" id="voice_input">
-      <label for="s_input">Soprano:</label><input id="s_input" type:"text" size="22" name="soprano" value=""><br>
-      <label for="a_input">Alto:</label><input id="a_input" type:"text" size="22" name="alto" value=""><br>
-      <label for="t_input">Tenor:</label><input id="t_input" type:"text" size="22" name="tenor" value=""><br>
-      <label for="b_input">Bass:</label><input id="b_input" type:"text" size="22" name="bass" value="">
+      <label for="s_input">Soprano:</label><input id="s_input" type:"text" size="23" name="soprano" value=""><br>
+      <label for="a_input">Alto:</label><input id="a_input" type:"text" size="23" name="alto" value=""><br>
+      <label for="t_input">Tenor:</label><input id="t_input" type:"text" size="23" name="tenor" value=""><br>
+      <label for="b_input">Bass:</label><input id="b_input" type:"text" size="23" name="bass" value="">
     </div>
   </fieldset>
   <fieldset>

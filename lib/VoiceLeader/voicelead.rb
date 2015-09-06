@@ -13,26 +13,24 @@ module VoiceLead
   def VoiceLead.parallel(chord_a, chord_b, type)
     parallel_possibilities = {'fifths' => 7, 'octaves' => 0, 'unisons' => 'U'}
     interval = parallel_possibilities[type]
-    set_a = chord_a.intervals
-    set_b = chord_b.intervals
     parallels = []
     
-    # Creates array of index values containing desired interval (for intervals_a)
+    # Creates array of index values containing desired interval (for chord_a.intervals)
     if interval == 'U'
-      indexes = set_a.each_index.select { |i| set_a[i][2] == 0 }
+      indexes = chord_a.intervals.each_index.select { |i| chord_a.intervals[i][2] == 0 }
     else
-      indexes = set_a.each_index.select { |i| set_a[i][2] != 0 &&
-                                          set_a[i][2] % 12 == interval }
+      indexes = chord_a.intervals.each_index.select { |i| chord_a.intervals[i][2] != 0 &&
+                                                          chord_a.intervals[i][2] % 12 == interval }
     end
      
     # Find parallel motion
-    parallels = indexes.select { |i| set_a[i][2] == set_b[i][2] }
+    parallels = indexes.select { |i| chord_a.intervals[i][2] == chord_b.intervals[i][2] }
       
     # Return mistake string
     mistakes = []
     parallels.each do |p| 
       mistakes << Mistake.new("Parallel #{type.capitalize}", 
-                              "Between the #{set_b[p][0]} and #{set_b[p][1]}")
+                              "Between the #{chord_b.intervals[p][0]} and #{chord_b.intervals[p][1]}")
     end
     
     return mistakes
@@ -40,18 +38,15 @@ module VoiceLead
 
   # Check for proper downward resolution of 7ths
   def VoiceLead.sevenths(chord_a, chord_b, none)
-    return [] unless chord_a.parts.has_value?('seventh')
-    voices = chord_a.parts.map{ |k,v| v == 'seventh' ? k : nil }.compact
+    return [] if chord_a.parts_reverse['seventh'].empty?
         
     mistakes = []
-    voices.each do |v|
+    chord_a.parts_reverse['seventh'].each do |v|
       leap = chord_a.pitches[v] - chord_b.pitches[v]
-      unless (1..2).include?(leap)
-        mistakes << Mistake.new('Improperly resolved 7th',
-                                "In the #{v}")
+      unless (1..2).include?(leap) && ['root', 'third', 'fifth'].include?(chord_b.parts[v])
+        mistakes << Mistake.new('Improperly resolved 7th', "In the #{v}")
       end
     end
-
     return mistakes
   end
   

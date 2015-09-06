@@ -14,6 +14,10 @@ img {
   /* This eliminates 'padding' below the image */
   vertical-align: top;
 }
+img.clef {
+  position: absolute;
+  top: 20px;
+}
 article {
   background: white;
   border: 0px double red;
@@ -21,21 +25,35 @@ article {
 }
 a.staff {
   width: 100%;
-  height: 100px;
+  height: 7em;
   display: block;
   background: #DDDDDD;
   background-image: url("images/staff_background.png");
   background-repeat: repeat-x;
 }
 a.staff img {
-  width: 19px;
   position: relative;
+}
+a.staff img.clef {
+  width: 2.5em;
+  top: 9%;
+  left: .1em;
+  margin-right: 1em;
+}
+a.staff img.note {
+  width: 1.3em;
   top: 42%;
-  left: 100px;
-  margin-right: 2.5em;
+  left: .2em;
+  margin-right: 1.2em;
+}
+a.staff img.accidental {
+  width: 1.3em;
+  top: 36%;
+  left: 0em;
+  margin-right: 0;
 }
 div#music {
-  border: 3px solid #440044;
+  border: .3em solid #440044;
 }
 div.float {
   float: left;
@@ -46,6 +64,23 @@ div#voice_input label {
   width: 10em;
   margin-right: .5em;
   text-align: right;
+}
+table.chords {
+  width: 100%;
+  background: #BB66BB;
+}
+table.chords th {
+  background: black;
+  color: white;
+}
+table.chords td {
+  vertical-align: top;
+  background: #DDDDDD;
+}
+table.chords ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
 h1, h2 {
   font-size: 1.5em;
