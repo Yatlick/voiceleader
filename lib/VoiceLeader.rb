@@ -1,19 +1,12 @@
 require './lib/VoiceLeader/chord.rb'
 require './lib/VoiceLeader/voicelead.rb'
 
-def make_music(key, notes)
+def make_music(key, voices)
   key = key.split(" ")
   key = {'type' => key[0], 'number' => key[1].to_i}
-  music = Music.new(key)
+  voices.map! { |v| Voice.new(v) }
   
-  pitches = []
-  notes.each do |n|
-    pitches << n.split(",").map(&:to_i)
-  end
-  pitches = pitches.transpose
-  pitches.each { |p| music.chords << Chord.new(p, music) }
-  
-  return music
+  music = Music.new(key, voices)
 end
 
 def find_mistakes(music, options)

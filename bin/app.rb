@@ -14,8 +14,8 @@ end
 
 post '/results' do
   key = params[:key]
-  notes = [params[:bass], params[:tenor], params[:alto], params[:soprano]]
-  music = make_music(key, notes)
+  voices = [params[:bass], params[:tenor], params[:alto], params[:soprano]]
+  music = make_music(key, voices)
   options = params[:options]
   mistakes = find_mistakes(music, options)
 

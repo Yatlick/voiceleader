@@ -24,7 +24,8 @@ module VoiceLead
     end
      
     # Find parallel motion
-    parallels = indexes.select { |i| chord_a.intervals[i][2] == chord_b.intervals[i][2] }
+    parallels = indexes.select { |i| chord_a.intervals[i][2] == chord_b.intervals[i][2] && 
+      chord_a.pitches[chord_a.intervals[i][0]] != chord_b.pitches[chord_b.intervals[i][0]]}
       
     # Return mistake string
     mistakes = []

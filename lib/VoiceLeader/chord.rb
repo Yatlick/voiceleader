@@ -1,19 +1,28 @@
 class Music
 
+  def make_chords
+    notes = [@bass.notes, @tenor.notes, @alto.notes, @soprano.notes]
+    chords = notes.transpose
+    chords.map! { |c| Chord.new(c) }
+  end
+
   def chord_pairs
     pairs = []
     self.chords.each_cons(2) { |c, d| pairs << [c, d] }
     return pairs
   end
 
-  def initialize(key)
-    @chords = []
+  def initialize(key, voices)
+    @soprano = voices[3]
+    @alto = voices[2]
+    @tenor = voices[1]
+    @bass = voices[0]
     @key = key
+    @chords = self.make_chords
   end
   
-  attr_reader :chords, :key
-  attr_writer :chords
-
+  attr_reader :chords, :key, :soprano, :alto, :tenor, :bass
+  
 end
 
 class Chord
@@ -120,38 +129,66 @@ class Chord
     return [parts, parts_reverse]
   end
   
-  def get_pitch_names
-    sharp_keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-    flat_keys = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
-    names = @music.key['type'] == 'sharp' ? sharp_keys : flat_keys
-    pitch_names = {}
-    @pitches.each do |voice, pitch|
-      pitch %= 12
-      pitch_names[voice] = names[pitch]
-    end
-    return pitch_names
-  end
-  
   def get_name
     root_voice = @parts_reverse['root'][0]
-    return "#{@pitch_names[root_voice]} #{@type}"
+    return "#{@notes[root_voice].name} #{@type}"
   end
   
-  def initialize(pitches, music)
-    @music = music
-    @pitch_set = pitches
-    @pitches = {'bass' => pitches[0], 
-                'tenor' => pitches[1], 
-                'alto' => pitches[2],
-                'soprano' => pitches[3]}
-    @pitch_names = self.get_pitch_names
+  def initialize(notes)
+    @notes = {'bass' => notes[0],
+              'tenor' => notes[1],
+              'alto' => notes[2],
+              'soprano' => notes[3]}
+    @pitch_set = notes.map { |n| n.pitch }
+    @pitches = {'bass' => @pitch_set[0], 
+                'tenor' => @pitch_set[1], 
+                'alto' => @pitch_set[2],
+                'soprano' => @pitch_set[3]}
+    @bass, @tenor, @alto, @soprano = notes
     @type = self.get_type
     @parts, @parts_reverse = self.get_parts
     @intervals = self.get_intervals
     @mistakes = []
   end
   
-  attr_reader :pitch_set, :pitches, :type, :parts, :parts_reverse, :intervals, :mistakes, :music, :pitch_names
+  attr_reader :pitch_set, :pitches, :type, :parts, :parts_reverse, :intervals, :mistakes, :notes, 
+              :bass, :tenor, :alto, :soprano
   attr_writer :mistakes
 
+end
+
+class Voice
+
+  def make_notes
+    notes = self.note_string.split(',')
+    notes.map! { |n| Note.new(n) }
+  end
+
+  def initialize(note_string)
+    @note_string = note_string
+    @notes = self.make_notes
+  end
+  
+  attr_reader :note_string, :notes
+end
+
+class Note
+
+  def get_pitch
+    letters = {'C' => 0, 'D' => 2, 'E' => 4, 'F' => 5, 'G' => 7, 'A' => 9, 'B' => 11}
+    accidentals = {nil => 0, '#' => 1, '##' => 2, 'b' => -1, 'bb' => -2}
+    pitch = 12 * (self.octave - 1) + letters[self.letter] + accidentals[self.accidental]
+  end
+
+  def initialize(full_name)
+    @full_name = full_name
+    @letter = full_name.slice(0).upcase
+    @octave = full_name.match(/\d+/).to_a[0].to_i
+    @accidental = full_name.match(/[b#]+/).to_a[0]
+    @name = full_name.delete(@octave.to_s)
+    @pitch = self.get_pitch
+  end
+  
+  attr_reader :full_name, :name, :letter, :octave, :accidental, :pitch
+  
 end

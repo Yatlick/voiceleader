@@ -7,6 +7,7 @@ function Accidental(note) {
   this.staff = note.staff;
   this.staff.node.insertBefore(this.node, note.node);
   this.types = ["doubleflat", "flat", "accidental", "sharp", "doublesharp"];
+  this.symbols = ["bb", "b", "", "#", "##"];
   this.value = 0;
   this.yPos = parseInt(window.getComputedStyle(this.node).top);
   this.change = function(direction) {
@@ -36,6 +37,28 @@ function Note(staff) {
       this.accidental.node.style.top = this.accidental.yPos + "%";
       this.position += direction;
     }
+  };
+  this.getName = function() {
+    var letters = ['B', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'A', 'B', 'C', 'D'];
+    var octaves = [3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 6, 6];
+    var octave = 0;
+    var clef = 0
+    switch(this.staff.voice) {
+    case 'tenor':
+      octave = 1;
+      break;
+    case 'bass':
+      clef = 2;
+      octave = 2
+      break;
+    default:
+      break;
+    }
+    var noteName = letters[this.position + clef];
+    noteName += this.accidental.symbols[this.accidental.value + 2];
+    noteName += (octaves[this.position + clef] - octave).toString();
+    
+    return noteName;
   };
 }
 
@@ -149,35 +172,14 @@ function Staff(voice) {
     e.preventDefault();
     return false;
   };
-  // convert note positions to pitch classes
-  this.getPitches = function() {
-    // get staff position of each note
-    var positions = [];
+  // convert note positions to note names
+  this.getNoteNames = function() {
+    noteNames = [];
     for (var i = 0, n = this.notes.length; i < n; i++) {
-      positions[i] = this.notes[i].position;
-      if (this.voice === "bass") positions[i] += 2; // correct for bass clef offset
-    }
-    // match staff position with pitch
-    var pitchValues = [35, 36, 38, 40, 41, 43, 45, 47, 48, 50,
-                       52, 53, 55, 57, 59, 60, 62, 64, 65]
-    var pitches = [];
-    var octave = 0;
-    switch(this.voice) {
-    case "bass":
-      octave = 24;
-      break;
-    case "tenor":
-      octave = 12;
-      break;
-    default:
-      octave = 0;
-      break;
-    }
-    for (var i = 0, n = positions.length; i < n; i++) {
-      pitches[i] = pitchValues[positions[i]] + this.notes[i].accidental.value - octave;
+      noteNames[i] = this.notes[i].getName();
     }
     inputField = document.getElementById(this.input);
-    inputField.value = pitches.toString();
+    inputField.value = noteNames.toString();
   };
 
   // set event handlers
@@ -205,10 +207,10 @@ migrate.addEventListener('click', function(){fillPitches();}, false);
 // Function for 'Fill Pitches' input button
 
 function fillPitches() {
-  soprano.getPitches();
-  alto.getPitches();
-  tenor.getPitches();
-  bass.getPitches();
+  soprano.getNoteNames();
+  alto.getNoteNames();
+  tenor.getNoteNames();
+  bass.getNoteNames();
 }
 
 // Functions for next and previousElementSibling() in IE < 9
